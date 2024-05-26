@@ -1,9 +1,20 @@
-import { Box, Container, Flex, Heading, Link, Text, VStack, HStack, Divider, useColorMode, useColorModeValue } from "@chakra-ui/react";
+import { Box, Container, Flex, Heading, Link, Text, VStack, HStack, Divider, useColorMode, useColorModeValue, Button } from "@chakra-ui/react";
+import { useState } from "react";
 import ColorModeSwitcher from "../App.jsx";
 
 const Index = () => {
   const bg = useColorModeValue("gray.100", "gray.900");
   const color = useColorModeValue("black", "white");
+
+  const [posts, setPosts] = useState([
+    { id: 1, title: "Blog Post Title 1", date: "January 1, 2023", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nisl eros, pulvinar facilisis justo mollis, auctor consequat urna." },
+    { id: 2, title: "Blog Post Title 2", date: "February 1, 2023", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nisl eros, pulvinar facilisis justo mollis, auctor consequat urna." }
+  ]);
+
+  const deletePost = (id) => {
+    setPosts(posts.filter(post => post.id !== id));
+  };
+
   return (
     <Container maxW="container.xl" p={4} bg={bg} color={color}>
       {/* Navigation Bar */}
@@ -13,7 +24,7 @@ const Index = () => {
           <Link href="#home" fontWeight="bold">Home</Link>
           <Link href="#about" fontWeight="bold">About</Link>
           <Link href="#contact" fontWeight="bold">Contact</Link>
-        <ColorModeSwitcher />
+          <ColorModeSwitcher />
         </HStack>
       </Flex>
 
@@ -22,18 +33,15 @@ const Index = () => {
         {/* Blog Posts Section */}
         <Box flex="3" p={4} bg={bg} color={color}>
           <VStack spacing={8} align="start">
-            <Box>
-              <Heading as="h2" size="md" mb={2}>Blog Post Title 1</Heading>
-              <Text fontSize="sm" color="gray.500">Posted on January 1, 2023</Text>
-              <Divider my={2} />
-              <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nisl eros, pulvinar facilisis justo mollis, auctor consequat urna.</Text>
-            </Box>
-            <Box>
-              <Heading as="h2" size="md" mb={2}>Blog Post Title 2</Heading>
-              <Text fontSize="sm" color="gray.500">Posted on February 1, 2023</Text>
-              <Divider my={2} />
-              <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nisl eros, pulvinar facilisis justo mollis, auctor consequat urna.</Text>
-            </Box>
+            {posts.map(post => (
+              <Box key={post.id}>
+                <Heading as="h2" size="md" mb={2}>{post.title}</Heading>
+                <Text fontSize="sm" color="gray.500">Posted on {post.date}</Text>
+                <Divider my={2} />
+                <Text mb={4}>{post.content}</Text>
+                <Button colorScheme="red" onClick={() => deletePost(post.id)}>Delete</Button>
+              </Box>
+            ))}
           </VStack>
         </Box>
 
